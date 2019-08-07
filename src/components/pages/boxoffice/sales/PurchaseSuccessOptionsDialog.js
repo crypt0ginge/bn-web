@@ -59,17 +59,11 @@ class PurchaseSuccessOptionsDialog extends React.Component {
 		}
 	}
 
-	async transferTickets(tickets, emailOrCellphoneNumber) {
-		const ticket_ids = [];
-		for (let index = 0; index < tickets.length; index++) {
-			ticket_ids.push(tickets[index].id);
-		}
-
+	async sendRedeemLink(orderId, emailOrCellphoneNumber) {
 		return new Promise(function(resolve, reject) {
 			Bigneon()
-				.tickets.transfer.send({
-					ticket_ids,
-					validity_period_in_seconds: 60 * 60 * 24, //TODO make this config based
+				.orders.sendPublicRedeemLink({
+					id: orderId,
 					email_or_phone: emailOrCellphoneNumber
 				})
 				.then(response => {
@@ -97,17 +91,7 @@ class PurchaseSuccessOptionsDialog extends React.Component {
 		const { currentOrderDetails } = this.props;
 		const { id } = currentOrderDetails;
 
-		const { result, error } = await this.getTickets(id);
-
-		if (error) {
-			notifications.showFromErrorResponse({
-				error,
-				defaultMessage: "Retrieving tickets failed."
-			});
-			return this.setState({ isSendingSMS: false });
-		}
-
-		const response = await this.transferTickets(result, emailOrCellphoneNumber);
+		const response = await this.sendRedeemLink(id, emailOrCellphoneNumber);
 
 		if (response.error) {
 			notifications.showFromErrorResponse({
