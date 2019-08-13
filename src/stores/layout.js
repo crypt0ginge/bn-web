@@ -26,6 +26,22 @@ class Layout {
 	@observable
 	showBottomMobileCartBar = true;
 
+	@observable
+	windowIsActive = null;
+
+	constructor() {
+		// Active
+		window.addEventListener("focus", () => this.setWindowActive(true));
+
+		// Inactive
+		window.addEventListener("blur", () => this.setWindowActive(false));
+	}
+
+	@action
+	setWindowActive(state) {
+		this.windowIsActive = state;
+	}
+
 	@action
 	toggleSideMenu(state) {
 		this.showSideMenu = state;

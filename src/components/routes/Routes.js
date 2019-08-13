@@ -25,6 +25,10 @@ import Signup from "../pages/authentication/Signup";
 import Login from "../pages/authentication/Login";
 import PasswordReset from "../pages/authentication/PasswordReset";
 
+const PublicTicketViewer = asyncComponent(() =>
+	import("../pages/myevents/public/Tickets")
+);
+
 //Unauthenticated pages
 import Home from "../pages/landing/Index";
 import ViewEvent from "../pages/events/ViewEvent";
@@ -233,6 +237,11 @@ class Routes extends Component {
 									path="/tickets/transfers/cancel"
 									component={CancelTransfer}
 								/>
+								<Route
+									exact
+									path="/public/tickets"
+									component={PublicTicketViewer}
+								/>
 								<PrivateRoute
 									exact
 									path="/account"
@@ -269,6 +278,7 @@ class Routes extends Component {
 									path="/events/:id/tickets/confirmation"
 									component={CheckoutConfirmation}
 								/>
+
 								{/* <Route exact path="/cart" component={CheckoutConfirmation} /> */}
 								<PrivateRoute
 									exact
