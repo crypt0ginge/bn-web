@@ -56,7 +56,10 @@ class Tickets extends Component {
 		super(props);
 
 		this.state = {
-			tickets: null
+			tickets: null,
+			orderId: null,
+			forUserId: null,
+			signature: null
 		};
 
 		this.refreshTickets = this.refreshTickets.bind(this);
@@ -64,14 +67,19 @@ class Tickets extends Component {
 
 	componentDidMount() {
 		const eventId = getUrlParam("event_id");
+		const orderId = getUrlParam("order_id");
+		const forUserId = getUrlParam("for");
+		const signature = getUrlParam("sig");
 
-		this.loadTickets();
+		this.setState({ orderId, forUserId, signature, eventId }, () => {
+			this.loadTickets();
 
-		if (eventId) {
-			this.loadEventDetails(eventId);
-		}
+			if (eventId) {
+				this.loadEventDetails(eventId);
+			}
 
-		this.refreshInterval = setInterval(this.refreshTickets, 1000);
+			this.refreshInterval = setInterval(this.refreshTickets, 1000);
+		});
 	}
 
 	componentWillUnmount() {
@@ -115,20 +123,27 @@ class Tickets extends Component {
 	}
 
 	loadTickets() {
-		this.isLoadingTickets = true;
+		this.setState({ isLoadingTickets: true });
+		const { orderId, forUserId, signature, eventId } = this.state;
 
-		//TODO
-		setTimeout(() => {
-			this.setState({
-				tickets: [
-					{ id: "test" },
-					{ id: "test2", status: "Redeemed" },
-					{ id: "test3" }
-				]
+		Bigneon()
+			.public.tickets({
+				event_id: eventId,
+				order_id: orderId,
+				for_id: forUserId,
+				signature
+			})
+			.then(response => {
+				this.setState({ isLoadingTickets: false, tickets: response.data });
+			})
+			.catch(error => {
+				this.setState({ isLoadingTickets: false });
+				console.error(error);
+				notifications.showFromErrorResponse({
+					error,
+					defaultMessage: "Failed to load tickets"
+				});
 			});
-
-			this.isLoadingTickets = false;
-		}, 500);
 	}
 
 	render() {
