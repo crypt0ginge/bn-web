@@ -5,9 +5,10 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
 import nl2br from "../../../helpers/nl2br";
-import { textColorPrimary } from "../../../config/theme";
+import { textColorPrimary, secondaryHex } from "../../../config/theme";
 import ArtistSummary from "../../elements/event/ArtistSummary";
 import { Link } from "react-router-dom";
+import LinkifyReact from "linkifyjs/react";
 
 const styles = theme => ({
 	root: {
@@ -28,12 +29,18 @@ const styles = theme => ({
 	},
 	artistsContainer: {
 		paddingTop: theme.spacing.unit * 2
+	},
+	eventDescriptionLink: {
+		color: secondaryHex
 	}
 });
 
 const EventDescriptionBody = props => {
 	const { classes, children, artists, eventIsCancelled } = props;
-
+	const options = {
+		nl2br: true,
+		className: classes.eventDescriptionLink
+	};
 	return (
 		<div className={classes.root}>
 			{eventIsCancelled ? (
@@ -44,7 +51,7 @@ const EventDescriptionBody = props => {
 			) : null}
 			{children ? (
 				<Typography className={classes.eventDetailText}>
-					{nl2br(children)}
+					<LinkifyReact options={options}>{children}</LinkifyReact>
 				</Typography>
 			) : null}
 

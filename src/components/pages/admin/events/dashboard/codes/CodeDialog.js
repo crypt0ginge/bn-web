@@ -820,7 +820,12 @@ class CodeDialog extends React.Component {
 					placeholder="Please enter code (min 6 chars)"
 					type="text"
 					onChange={e => {
-						code.redemption_codes = [e.target.value.toUpperCase()];
+						code.redemption_codes = [
+							e.target.value
+								.toUpperCase()
+								.split(" ")
+								.join("")
+						];
 						this.setState({ code });
 					}}
 				/>

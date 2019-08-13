@@ -599,7 +599,10 @@ class HoldDialog extends React.Component {
 						placeholder="- Please enter code (min 6 chars)"
 						type="text"
 						onChange={e => {
-							hold.redemption_code = e.target.value.toUpperCase();
+							hold.redemption_code = e.target.value
+								.toUpperCase()
+								.split(" ")
+								.join("");
 							this.setState({ hold });
 						}}
 						// onBlur={this.validateFields.bind(this)}

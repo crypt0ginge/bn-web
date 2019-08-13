@@ -131,17 +131,24 @@ class Container extends React.Component {
 			drawStyle.width = drawerWidth;
 		}
 
+		let homeLink = "/";
+		if (user.canViewStudio) {
+			homeLink = "/admin/events";
+		}
+
 		return (
 			<div>
 				{isBoxOffice ? (
 					<BoxOfficeAppBar
 						handleDrawerToggle={this.handleDrawerToggle.bind(this)}
 						history={history}
+						homeLink={homeLink}
 					/>
 				) : (
 					<AppBar
 						handleDrawerToggle={this.handleDrawerToggle.bind(this)}
 						history={history}
+						homeLink={homeLink}
 					/>
 				)}
 

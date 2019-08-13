@@ -1,5 +1,5 @@
 const BigNeonWidget = {};
-(function (context) {
+(function(context) {
 	/** Helper Functions */
 	function getSyncScriptParams() {
 		const scripts = document.getElementsByTagName("script");
@@ -15,7 +15,7 @@ const BigNeonWidget = {};
 
 	function xhr(method, uri, body, handler) {
 		const req = new XMLHttpRequest();
-		req.onreadystatechange = function () {
+		req.onreadystatechange = function() {
 			if (req.readyState === 4 && handler) {
 				handler(req.responseText);
 			}
@@ -32,15 +32,17 @@ const BigNeonWidget = {};
 		hours = hours % 12;
 		hours = hours ? hours : 12; // the hour '0' should be '12'
 		minutes = ("0" + minutes).slice(-2);
-		const strTime = hours + ":" + minutes + " " + ampm;
-		return strTime;
+		return `<span class="bn-event-date-hours">${hours}</span><span class="bn-event-date-colon">:</span><span class="bn-event-date-minutes">${minutes}</span> <span class="bn-event-date-meridian">${ampm}</span>`;
 	}
 
 	function prepareDateTime(dateTime) {
 		if (!dateTime) {
 			return false;
 		}
-		dateTime = dateTime.replace(/[a-zA-Z]+$/g, "").replace(/\.\d+$/g, "").replace(/ [-|+]+\d{4}$/,"");
+		dateTime = dateTime
+			.replace(/[a-zA-Z]+$/g, "")
+			.replace(/\.\d+$/g, "")
+			.replace(/ [-|+]+\d{4}$/, "");
 		const parts = dateTime.split("T");
 		return parts.join(" ");
 	}
@@ -50,7 +52,6 @@ const BigNeonWidget = {};
 		if (localizedDateTime) {
 			//Use the date time exactly as it is displayed
 			date = new Date(prepareDateTime(localizedDateTime));
-
 		} else {
 			//Set it as a UTC time and show the users current local version
 			date = new Date(prepareDateTime(utcDateTime) + " UTC");
@@ -71,16 +72,23 @@ const BigNeonWidget = {};
 	context.events = false;
 	context.params = getSyncScriptParams();
 
-	context.fetch = function (page) {
+	context.fetch = function(page) {
 		page = page || 0;
-		xhr("GET", `${context.params.apiUrl}events?page=${page}&organization_id=${context.params.organizationId}`, null, function(eventsString) {
-			try {
-				context.events = JSON.parse(eventsString);
-				context.render(context.events, true);
-			}catch(e) {
-				console.error(e);
+		xhr(
+			"GET",
+			`${context.params.apiUrl}events?page=${page}&organization_id=${
+				context.params.organizationId
+			}`,
+			null,
+			function(eventsString) {
+				try {
+					context.events = JSON.parse(eventsString);
+					context.render(context.events, true);
+				} catch (e) {
+					console.error(e);
+				}
 			}
-		});
+		);
 	};
 
 	context.render = function(events, firstRender) {
@@ -88,14 +96,29 @@ const BigNeonWidget = {};
 			const head = document.head || document.getElementsByTagName("head")[0],
 				style = document.createElement("style");
 			style.type = "text/css";
-			style.appendChild(document.createTextNode(window.atob(context.params.style)));
+			style.appendChild(
+				document.createTextNode(window.atob(context.params.style))
+			);
 			head.appendChild(style);
 		}
 		if (!events) {
 			events = context.events;
 		}
 		const days = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
-		const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+		const months = [
+			"Jan",
+			"Feb",
+			"Mar",
+			"Apr",
+			"May",
+			"Jun",
+			"Jul",
+			"Aug",
+			"Sep",
+			"Oct",
+			"Nov",
+			"Dec"
+		];
 
 		let target = context.params.target;
 		const regexp = /^[^a-zA-Z]/;
@@ -103,8 +126,14 @@ const BigNeonWidget = {};
 		const parent = document.querySelector(target);
 
 		events.data.forEach(event => {
-			const eventDate = parseLocalizedDateTime(event.localized_times.event_start, event.event_start);
-			const doorTime = parseLocalizedDateTime(event.localized_times.door_time || event.localized_times.event_start, event.door_time || event.event_start);
+			const eventDate = parseLocalizedDateTime(
+				event.localized_times.event_start,
+				event.event_start
+			);
+			const doorTime = parseLocalizedDateTime(
+				event.localized_times.door_time || event.localized_times.event_start,
+				event.door_time || event.event_start
+			);
 			const priceText = getPrice(event);
 
 			const row = document.createElement("a");
@@ -121,8 +150,12 @@ const BigNeonWidget = {};
 
 			const eventModuleDate = document.createElement("h3");
 			eventModuleDate.className = "bn-event-date";
-			const eventDateFormatted = `${days[eventDate.getDay()]} ${months[eventDate.getMonth()]} ${eventDate.getDate()} ${eventDate.getFullYear()}`;
-			eventModuleDate.innerText = eventDateFormatted;
+			const eventDateFormatted = `<span class="bn-event-date-weekday">${
+				days[eventDate.getDay()]
+			}</span> <span class="bn-event-date-month">${
+				months[eventDate.getMonth()]
+			}</span> <span class="bn-event-date-day">${eventDate.getDate()}</span> <span class="bn-event-date-year">${eventDate.getFullYear()}</span>`;
+			eventModuleDate.innerHTML = eventDateFormatted;
 			eventModuleImageContainer.appendChild(eventModuleDate);
 
 			if (event.promo_image_url) {
@@ -138,7 +171,7 @@ const BigNeonWidget = {};
 
 			const eventModuleDateMobile = document.createElement("h3");
 			eventModuleDateMobile.className = "bn-event-date-mobile";
-			eventModuleDateMobile.innerText = eventDateFormatted;
+			eventModuleDateMobile.innerHTML = eventDateFormatted;
 			eventModuleTextContainer.appendChild(eventModuleDateMobile);
 
 			const eventModuleArtists = document.createElement("h2");
@@ -148,7 +181,7 @@ const BigNeonWidget = {};
 
 			const eventModuleTime = document.createElement("p");
 			eventModuleTime.className = "bn-event-time";
-			eventModuleTime.innerText = formatAMPM(doorTime);
+			eventModuleTime.innerHTML = formatAMPM(doorTime);
 			eventModuleTextContainer.appendChild(eventModuleTime);
 
 			const eventModuleButtonContainer = document.createElement("div");
@@ -168,8 +201,6 @@ const BigNeonWidget = {};
 
 			parent.appendChild(row);
 		});
-
 	};
 	context.fetch();
-
 })(BigNeonWidget);

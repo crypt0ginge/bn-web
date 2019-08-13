@@ -13,7 +13,7 @@ import FanActivityCardRow from "./FanActivityCardRow";
 import FanActivityTransferRow from "./FanActivityTransferRow";
 import FanActivityMobileRow from "./FanActivityMobileRow";
 import servedImage from "../../../../helpers/imagePathHelper";
-import classNames from "classnames";
+import classnames from "classnames";
 import { dollars } from "../../../../helpers/money";
 import FanActivityPurchaseRow from "./FanActivityPurchaseRow";
 import { Link } from "react-router-dom";
@@ -209,7 +209,7 @@ class FanHistoryActivityCard extends Component {
 									</Typography>
 									<Typography>
 										<span
-											className={classNames({
+											className={classnames({
 												[classes.pinkSpan]: true,
 												[classes.boldSpan]: true
 											})}
@@ -224,7 +224,12 @@ class FanHistoryActivityCard extends Component {
 										</span>
 										&nbsp; (
 										<Link to={orderPath}>
-											<span className={classes.pinkSpan}>
+											<span
+												className={classnames({
+													[classes.pinkSpan]: true,
+													[classes.boldSpan]: true
+												})}
+											>
 												Order #{order_number}
 											</span>
 										</Link>
@@ -277,7 +282,7 @@ class FanHistoryActivityCard extends Component {
 																{item.code}
 															</span>
 															<span
-																className={classNames({
+																className={classnames({
 																	[classes.greySubtitle]: true,
 																	[classes.boldSpan]: true
 																})}
@@ -287,7 +292,7 @@ class FanHistoryActivityCard extends Component {
 															</span>
 															<br/>
 															<span
-																className={classNames({
+																className={classnames({
 																	[classes.greySubtitle]: true,
 																	[classes.boldSpan]: true
 																})}
@@ -343,7 +348,7 @@ class FanHistoryActivityCard extends Component {
 										</Typography>
 										<Typography>
 											<span
-												className={classNames({
+												className={classnames({
 													[classes.pinkSpan]: true,
 													[classes.boldSpan]: true
 												})}
@@ -352,7 +357,7 @@ class FanHistoryActivityCard extends Component {
 											</span>
 											<span className={classes.boldSpan}>scanned&nbsp;</span>
 											<span
-												className={classNames({
+												className={classnames({
 													[classes.pinkSpan]: true,
 													[classes.boldSpan]: true
 												})}
@@ -407,7 +412,7 @@ class FanHistoryActivityCard extends Component {
 										</Typography>
 										<Typography>
 											<span
-												className={classNames({
+												className={classnames({
 													[classes.pinkSpan]: true,
 													[classes.boldSpan]: true
 												})}
@@ -475,7 +480,7 @@ class FanHistoryActivityCard extends Component {
 									</Typography>
 									<Typography>
 										<span
-											className={classNames({
+											className={classnames({
 												[classes.pinkSpan]: true,
 												[classes.boldSpan]: true
 											})}
@@ -490,7 +495,7 @@ class FanHistoryActivityCard extends Component {
 										<span>
 											to&nbsp;
 											<span
-												className={classNames({
+												className={classnames({
 													[classes.pinkSpan]: true,
 													[classes.boldSpan]: true
 												})}
@@ -499,7 +504,12 @@ class FanHistoryActivityCard extends Component {
 											</span>
 											&nbsp;(
 											<Link to={orderPath}>
-												<span className={classes.pinkSpan}>
+												<span
+													className={classnames({
+														[classes.pinkSpan]: true,
+														[classes.boldSpan]: true
+													})}
+												>
 													Order #{order_number}
 												</span>
 											</Link>
@@ -524,7 +534,7 @@ class FanHistoryActivityCard extends Component {
 									<div className={classes.card}>
 										<div className={classes.halfFlex}>
 											<Typography
-												className={classNames({
+												className={classnames({
 													[classes.greySubtitleCap]: true,
 													[classes.halfFlexItem]: true
 												})}
@@ -532,7 +542,7 @@ class FanHistoryActivityCard extends Component {
 												Items refunded
 											</Typography>
 											<Typography
-												className={classNames({
+												className={classnames({
 													[classes.greySubtitleCap]: true,
 													[classes.halfFlexItem]: true
 												})}
@@ -542,7 +552,7 @@ class FanHistoryActivityCard extends Component {
 										</div>
 										<div className={classes.halfFlex}>
 											<div
-												className={classNames({
+												className={classnames({
 													[classes.darkGreySubtitle]: true,
 													[classes.halfFlexItem]: true
 												})}
@@ -555,7 +565,7 @@ class FanHistoryActivityCard extends Component {
 														>
 															{item.item_type} | {order_number} |
 															<span
-																className={classNames({
+																className={classnames({
 																	[classes.totalRevenue]: true,
 																	[classes.boldSpan]: true
 																})}
@@ -573,7 +583,7 @@ class FanHistoryActivityCard extends Component {
 												})}
 											</div>
 											<Typography
-												className={classNames({
+												className={classnames({
 													[classes.darkGreySubtitle]: true,
 													[classes.halfFlexItem]: true
 												})}
@@ -600,7 +610,7 @@ class FanHistoryActivityCard extends Component {
 									</Typography>
 									<Typography>
 										<span
-											className={classNames({
+											className={classnames({
 												[classes.pinkSpan]: true,
 												[classes.boldSpan]: true
 											})}
@@ -611,7 +621,16 @@ class FanHistoryActivityCard extends Component {
 										&nbsp;
 										<span>to</span>
 										&nbsp;
-										<span className={classes.boldSpan}>{name}</span>
+										<Link to={orderPath}>
+											<span
+												className={classnames({
+													[classes.pinkSpan]: true,
+													[classes.boldSpan]: true
+												})}
+											>
+												Order #{order_number}
+											</span>
+										</Link>
 									</Typography>
 									<div onClick={onExpandChange} className={classes.showHideRow}>
 										<Typography className={classes.showHide}>
@@ -666,7 +685,7 @@ class FanHistoryActivityCard extends Component {
 									</Typography>
 									<Typography>
 										<span
-											className={classNames({
+											className={classnames({
 												[classes.pinkSpan]: true,
 												[classes.boldSpan]: true
 											})}
@@ -856,7 +875,7 @@ class FanHistoryActivityCard extends Component {
 									/>
 									<Typography>
 										<span
-											className={classNames({
+											className={classnames({
 												[classes.pinkSpan]: true,
 												[classes.boldSpan]: true
 											})}
@@ -872,7 +891,12 @@ class FanHistoryActivityCard extends Component {
 										</span>
 										&nbsp; (
 										<Link to={orderPath}>
-											<span className={classes.pinkSpan}>
+											<span
+												className={classnames({
+													[classes.pinkSpan]: true,
+													[classes.boldSpan]: true
+												})}
+											>
 												Order #{order_number}
 											</span>
 										</Link>
@@ -936,7 +960,7 @@ class FanHistoryActivityCard extends Component {
 															{item.code}
 														</span>
 														<span
-															className={classNames({
+															className={classnames({
 																[classes.greySubtitle]: true,
 																[classes.boldSpan]: true
 															})}
@@ -946,7 +970,7 @@ class FanHistoryActivityCard extends Component {
 														</span>
 														<br/>
 														<span
-															className={classNames({
+															className={classnames({
 																[classes.greySubtitle]: true,
 																[classes.boldSpan]: true
 															})}
@@ -997,7 +1021,7 @@ class FanHistoryActivityCard extends Component {
 										/>
 										<Typography>
 											<span
-												className={classNames({
+												className={classnames({
 													[classes.pinkSpan]: true,
 													[classes.boldSpan]: true
 												})}
@@ -1006,7 +1030,7 @@ class FanHistoryActivityCard extends Component {
 											</span>
 											<span className={classes.boldSpan}>scanned&nbsp;</span>
 											<span
-												className={classNames({
+												className={classnames({
 													[classes.pinkSpan]: true,
 													[classes.boldSpan]: true
 												})}
@@ -1066,7 +1090,7 @@ class FanHistoryActivityCard extends Component {
 										/>
 										<Typography>
 											<span
-												className={classNames({
+												className={classnames({
 													[classes.pinkSpan]: true,
 													[classes.boldSpan]: true
 												})}
@@ -1140,7 +1164,7 @@ class FanHistoryActivityCard extends Component {
 									/>
 									<Typography className={classes.mobiTitle}>
 										<span
-											className={classNames({
+											className={classnames({
 												[classes.pinkSpan]: true,
 												[classes.boldSpan]: true
 											})}
@@ -1155,7 +1179,7 @@ class FanHistoryActivityCard extends Component {
 										<span>
 											to&nbsp;
 											<span
-												className={classNames({
+												className={classnames({
 													[classes.pinkSpan]: true,
 													[classes.boldSpan]: true
 												})}
@@ -1165,7 +1189,12 @@ class FanHistoryActivityCard extends Component {
 											</span>
 											&nbsp;(
 											<Link to={orderPath}>
-												<span className={classes.pinkSpan}>
+												<span
+													className={classnames({
+														[classes.pinkSpan]: true,
+														[classes.boldSpan]: true
+													})}
+												>
 													Order #{order_number}
 												</span>
 											</Link>
@@ -1205,7 +1234,7 @@ class FanHistoryActivityCard extends Component {
 													>
 														{item.item_type} | {order_number} |
 														<span
-															className={classNames({
+															className={classnames({
 																[classes.totalRevenue]: true,
 																[classes.boldSpan]: true
 															})}
@@ -1249,7 +1278,7 @@ class FanHistoryActivityCard extends Component {
 									/>
 									<Typography>
 										<span
-											className={classNames({
+											className={classnames({
 												[classes.pinkSpan]: true,
 												[classes.boldSpan]: true
 											})}
@@ -1260,7 +1289,16 @@ class FanHistoryActivityCard extends Component {
 										&nbsp;
 										<span>to</span>
 										&nbsp;
-										<span className={classes.boldSpan}>{name}</span>
+										<Link to={orderPath}>
+											<span
+												className={classnames({
+													[classes.pinkSpan]: true,
+													[classes.boldSpan]: true
+												})}
+											>
+												Order #{order_number}
+											</span>
+										</Link>
 									</Typography>
 								</div>
 								<div className={classes.mobileHeaderBottomRow}>
@@ -1321,7 +1359,7 @@ class FanHistoryActivityCard extends Component {
 									)}
 									<Typography>
 										<span
-											className={classNames({
+											className={classnames({
 												[classes.pinkSpan]: true,
 												[classes.boldSpan]: true
 											})}

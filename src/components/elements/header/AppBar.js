@@ -46,7 +46,7 @@ const styles = theme => {
 };
 
 const CustomAppBar = observer(props => {
-	const { classes, handleDrawerToggle, history } = props;
+	const { classes, handleDrawerToggle, history, homeLink } = props;
 
 	return (
 		<AppBar position={"static"}>
@@ -69,14 +69,16 @@ const CustomAppBar = observer(props => {
 				) : null}
 
 				<div className={classes.headerLinkContainer}>
-					<Link to={"/"}>
+					<Link to={homeLink}>
 						<AppBarLogo/>
 					</Link>
 				</div>
 
-				<Hidden smDown>
-					<SearchToolBarInput history={history}/>
-				</Hidden>
+				{!layout.showStudioLogo ? (
+					<Hidden smDown>
+						<SearchToolBarInput history={history}/>
+					</Hidden>
+				) : null}
 
 				<span className={classes.rightMenuOptions}>
 					<Hidden smDown>
@@ -91,10 +93,15 @@ const CustomAppBar = observer(props => {
 	);
 });
 
+CustomAppBar.defaultProps = {
+	homeLink: "/"
+};
+
 CustomAppBar.propTypes = {
 	classes: PropTypes.object.isRequired,
 	handleDrawerToggle: PropTypes.func,
-	history: PropTypes.object.isRequired
+	history: PropTypes.object.isRequired,
+	homeLink: PropTypes.string
 };
 
 export default withStyles(styles)(CustomAppBar);

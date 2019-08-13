@@ -783,31 +783,31 @@ class Details extends Component {
 					</Grid>
 				</Grid>
 
-				<Grid container spacing={32}>
-					<Grid item xs={12} sm={12} md={5} lg={5}>
-						<Collapse in={!showEmbeddedMedia}>
-							<Button
-								style={{ width: "100%" }}
-								variant="additional"
-								onClick={() => this.changeDetails({ showEmbeddedMedia: true })}
-							>
-								Add embedded media
-							</Button>
-						</Collapse>
-						<Collapse in={showEmbeddedMedia}>
-							<InputGroup
-								error={errors.videoUrl}
-								value={videoUrl}
-								name="videoUrl"
-								label="Featured media url"
-								type="text"
-								onChange={e => this.changeDetails({ videoUrl: e.target.value })}
-								onBlur={validateFields}
-								placeholder="https://vimeo.com/event-video-html"
-							/>
-						</Collapse>
-					</Grid>
-				</Grid>
+				{/*<Grid container spacing={32}>*/}
+				{/*	<Grid item xs={12} sm={12} md={5} lg={5}>*/}
+				{/*		<Collapse in={!showEmbeddedMedia}>*/}
+				{/*			<Button*/}
+				{/*				style={{ width: "100%" }}*/}
+				{/*				variant="additional"*/}
+				{/*				onClick={() => this.changeDetails({ showEmbeddedMedia: true })}*/}
+				{/*			>*/}
+				{/*				Add embedded media*/}
+				{/*			</Button>*/}
+				{/*		</Collapse>*/}
+				{/*		<Collapse in={showEmbeddedMedia}>*/}
+				{/*			<InputGroup*/}
+				{/*				error={errors.videoUrl}*/}
+				{/*				value={videoUrl}*/}
+				{/*				name="videoUrl"*/}
+				{/*				label="Featured media url"*/}
+				{/*				type="text"*/}
+				{/*				onChange={e => this.changeDetails({ videoUrl: e.target.value })}*/}
+				{/*				onBlur={validateFields}*/}
+				{/*				placeholder="https://vimeo.com/event-video-html"*/}
+				{/*			/>*/}
+				{/*		</Collapse>*/}
+				{/*	</Grid>*/}
+				{/*</Grid>*/}
 
 				<Grid container spacing={32}>
 					<Grid item xs={12} sm={12} md={5} lg={5}>

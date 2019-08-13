@@ -154,6 +154,7 @@ const TicketDetails = observer(props => {
 		ticketTimesDirty,
 		priceForDisplay,
 		visibility,
+		autoFocus,
 		isCancelled,
 		parentId,
 		ticketTypes,
@@ -243,6 +244,7 @@ const TicketDetails = observer(props => {
 				<Grid className={classes.simpleInputContainer} item xs={12} sm={6}>
 					<InputGroup
 						disabled={isCancelled}
+						autoFocus={autoFocus}
 						error={errors.name}
 						value={name}
 						name="name"

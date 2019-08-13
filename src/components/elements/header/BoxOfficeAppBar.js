@@ -45,7 +45,7 @@ const styles = theme => {
 };
 
 const BoxOfficeAppBar = props => {
-	const { classes, handleDrawerToggle, history } = props;
+	const { classes, handleDrawerToggle, history, homeLink } = props;
 
 	return (
 		<div>
@@ -64,7 +64,7 @@ const BoxOfficeAppBar = props => {
 						</Hidden>
 					) : null}
 					<div className={classes.logoContainer}>
-						<Link to={"/"}>
+						<Link to={homeLink}>
 							<img
 								alt="Header logo"
 								className={classes.headerImage}
@@ -94,10 +94,15 @@ const BoxOfficeAppBar = props => {
 	);
 };
 
+BoxOfficeAppBar.defaultProps = {
+	homeLink: "/"
+};
+
 BoxOfficeAppBar.propTypes = {
 	classes: PropTypes.object.isRequired,
 	handleDrawerToggle: PropTypes.func,
-	history: PropTypes.object.isRequired
+	history: PropTypes.object.isRequired,
+	homeLink: PropTypes.string
 };
 
 export default withStyles(styles)(BoxOfficeAppBar);

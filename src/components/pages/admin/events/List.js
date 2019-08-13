@@ -20,7 +20,7 @@ import moment from "moment";
 import notifications from "../../../../stores/notifications";
 import Button from "../../../elements/Button";
 import StyledLink from "../../../elements/StyledLink";
-import CancelEventDialog from "./CancelEventDialog";
+import DeleteCancelEventDialog from "./DeleteCancelEventDialog";
 import Bigneon from "../../../../helpers/bigneon";
 import PageHeading from "../../../elements/PageHeading";
 import EventSummaryCard from "./EventSummaryCard";
@@ -60,7 +60,9 @@ class EventsList extends Component {
 
 		this.state = {
 			events: null,
-			cancelEventId: null,
+			isDelete: false,
+			deleteCancelEventId: null,
+			eventMenuSelected: null,
 			optionsAnchorEl: null,
 			upcomingOrPast: this.props.match.params.upcomingOrPast || "upcoming"
 		};
@@ -132,8 +134,27 @@ class EventsList extends Component {
 		this.setState({ expandedCardId });
 	}
 
+	get cancelMenuItemDisabled() {
+		const { events, eventMenuSelected } = this.state;
+
+		const selectedEvent = events.find(e => e.id === eventMenuSelected);
+
+		if (selectedEvent) {
+			if (selectedEvent.cancelled_at) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	renderEvents() {
-		const { events, expandedCardId, upcomingOrPast } = this.state;
+		const {
+			events,
+			expandedCardId,
+			upcomingOrPast,
+			eventMenuSelected
+		} = this.state;
 		const eventEnded = upcomingOrPast === "past";
 
 		const { optionsAnchorEl } = this.state;
@@ -146,12 +167,13 @@ class EventsList extends Component {
 			return events.map(eventData => {
 				const { venue, ...event } = eventData;
 				const { id, name, promo_image_url, cancelled_at } = event;
+
 				const eventOptions = [
 					{
 						text: "Dashboard",
 						onClick: () =>
 							this.props.history.push(
-								`/admin/events/${this.eventMenuSelected}/dashboard`
+								`/admin/events/${eventMenuSelected}/dashboard`
 							),
 						MenuOptionIcon: DashboardIcon
 					},
@@ -160,21 +182,35 @@ class EventsList extends Component {
 						disabled: eventEnded || !user.hasScope("event:write"),
 						onClick: () =>
 							this.props.history.push(
-								`/admin/events/${this.eventMenuSelected}/edit`
+								`/admin/events/${eventMenuSelected}/edit`
 							),
 						MenuOptionIcon: EditIcon
 					},
 					{
 						text: "View event",
 						onClick: () =>
-							this.props.history.push(`/events/${this.eventMenuSelected}`),
+							this.props.history.push(`/events/${eventMenuSelected}`),
 						MenuOptionIcon: ViewIcon
 					},
 					{
 						text: "Cancel event",
+						disabled:
+							!user.hasScope("event:write") || this.cancelMenuItemDisabled,
+						onClick: () =>
+							this.setState({
+								deleteCancelEventId: eventMenuSelected,
+								isDelete: false
+							}),
+						MenuOptionIcon: CancelIcon
+					},
+					{
+						text: "Delete event",
 						disabled: !user.hasScope("event:write"),
 						onClick: () =>
-							this.setState({ cancelEventId: this.eventMenuSelected }),
+							this.setState({
+								deleteCancelEventId: eventMenuSelected,
+								isDelete: true
+							}),
 						MenuOptionIcon: CancelIcon
 					}
 				];
@@ -183,7 +219,7 @@ class EventsList extends Component {
 					<div>
 						<IconButton
 							onClick={e => {
-								this.eventMenuSelected = id;
+								this.setState({ eventMenuSelected: id });
 								this.handleMenuClick(e);
 							}}
 						>
@@ -262,18 +298,21 @@ class EventsList extends Component {
 	}
 
 	render() {
-		const { cancelEventId, upcomingOrPast } = this.state;
+		const { deleteCancelEventId, upcomingOrPast, isDelete } = this.state;
 		const { classes } = this.props;
 
 		return (
 			<div>
-				<CancelEventDialog
-					id={cancelEventId}
+				<DeleteCancelEventDialog
+					id={deleteCancelEventId}
+					isDelete={isDelete}
 					onClose={() =>
-						this.setState({ cancelEventId: null }, this.updateEvents.bind(this))
+						this.setState(
+							{ deleteCancelEventId: null, isDelete: false },
+							this.updateEvents.bind(this)
+						)
 					}
 				/>
-
 				<Grid container spacing={0} alignItems="center">
 					<Grid item xs={6} sm={6} lg={6}>
 						<PageHeading iconUrl="/icons/events-multi.svg">

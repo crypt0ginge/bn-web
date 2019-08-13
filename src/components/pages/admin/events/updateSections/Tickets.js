@@ -565,11 +565,29 @@ class EventTickets extends Component {
 		this.updateTicketType = this.updateTicketType.bind(this);
 		this.state = {
 			deleteIndex: false,
-			areYouSureDeleteTicketDialogOpen: false
+			areYouSureDeleteTicketDialogOpen: false,
+			ticketTypeHeight: 0,
+			shouldFocus: false
 		};
+		this.addTicketScrollRef = React.createRef();
 	}
 
 	componentDidMount() {}
+
+	addTicketOnClick() {
+		eventUpdateStore.addTicketType();
+		this.handleScrollToElement();
+	}
+
+	handleScrollToElement() {
+		if (this.addTicketScrollRef.current) {
+			const scrollPos =
+				this.addTicketScrollRef.current.offsetTop -
+				this.addTicketScrollRef.current.clientHeight / 2;
+			window.scrollTo(0, scrollPos);
+			this.setState({ shouldFocus: true });
+		}
+	}
 
 	updateTicketType(index, details) {
 		eventUpdateStore.updateTicketType(index, details);
@@ -650,8 +668,8 @@ class EventTickets extends Component {
 			eventStartDate,
 			onChangeDate
 		} = this.props;
+		const { shouldFocus } = this.state;
 		const { ticketTypes, ticketTypeActiveIndex } = eventUpdateStore;
-
 		return (
 			<div>
 				{this.renderAreYouSureDeleteDialog()}
@@ -665,37 +683,39 @@ class EventTickets extends Component {
 					if (Object.keys(ticketTypeErrors).length > 0) {
 						active = true;
 					}
-
 					return (
 						<LeftAlignedSubCard key={index} active={active}>
-							<TicketType
-								isCancelled={isCancelled}
-								onEditClick={() => {
-									const newIndex =
-										eventUpdateStore.ticketTypeActiveIndex === index
-											? null
-											: index;
-									eventUpdateStore.ticketTypeActivate(newIndex);
-								}}
-								updateTicketType={this.updateTicketType}
-								deleteTicketType={() => this.openDeleteDialog(index)}
-								active={active}
-								index={index}
-								validateFields={validateFields}
-								errors={ticketTypeErrors}
-								ticketTimesDirty={ticketTimesDirty}
-								onChangeDate={onChangeDate}
-								eventStartDate={eventStartDate}
-								ticketTypes={ticketTypes}
-								{...ticketType}
-							/>
+							<div ref={this.addTicketScrollRef}>
+								<TicketType
+									isCancelled={isCancelled}
+									onEditClick={() => {
+										const newIndex =
+											eventUpdateStore.ticketTypeActiveIndex === index
+												? null
+												: index;
+										eventUpdateStore.ticketTypeActivate(newIndex);
+									}}
+									updateTicketType={this.updateTicketType}
+									deleteTicketType={() => this.openDeleteDialog(index)}
+									active={active}
+									index={index}
+									autoFocus={shouldFocus}
+									validateFields={validateFields}
+									errors={ticketTypeErrors}
+									ticketTimesDirty={ticketTimesDirty}
+									onChangeDate={onChangeDate}
+									eventStartDate={eventStartDate}
+									ticketTypes={ticketTypes}
+									{...ticketType}
+								/>
+							</div>
 						</LeftAlignedSubCard>
 					);
 				})}
 
 				<div
 					className={classes.addTicketType}
-					onClick={() => eventUpdateStore.addTicketType()}
+					onClick={this.addTicketOnClick.bind(this)}
 				>
 					<img
 						className={classes.addIcon}

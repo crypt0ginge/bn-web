@@ -7,10 +7,25 @@ import notifications from "../../../../stores/notifications";
 import Button from "../../../elements/Button";
 import Dialog from "../../../elements/Dialog";
 import Bigneon from "../../../../helpers/bigneon";
+import { fontFamilyDemiBold } from "../../../../config/theme";
 
-const styles = {};
+const styles = theme => ({
+	btnStyle: {
+		flex: 1,
+		marginRight: theme.spacing.unit
+	},
+	btnContainer: {
+		display: "flex",
+		marginTop: theme.spacing.unit * 2,
+		justifyItems: "space-between"
+	},
+	nameText: {
+		marginTop: theme.spacing.unit,
+		fontFamily: fontFamilyDemiBold
+	}
+});
 
-class CancelEventDialog extends React.Component {
+class DeleteCancelEventDialog extends React.Component {
 	constructor(props) {
 		super(props);
 
@@ -36,18 +51,9 @@ class CancelEventDialog extends React.Component {
 				})
 				.catch(error => {
 					console.error(error);
-					let message = "Loading event details failed.";
-					if (
-						error.response &&
-						error.response.data &&
-						error.response.data.error
-					) {
-						message = error.response.data.error;
-					}
-
-					notifications.show({
-						message,
-						variant: "error"
+					notifications.showFromErrorResponse({
+						defaultMessage: "Loading events failed.",
+						error
 					});
 				});
 		}
@@ -56,12 +62,15 @@ class CancelEventDialog extends React.Component {
 	onSubmit(e) {
 		e.preventDefault();
 
-		const { onClose, id } = this.props;
+		const { onClose, id, isDelete } = this.props;
 
 		this.setState({ isSubmitting: true });
 
-		Bigneon()
-			.events.del({ id })
+		const deleteOrCancelCall = isDelete
+			? Bigneon().events.delete
+			: Bigneon().events.cancel;
+
+		deleteOrCancelCall({ id })
 			.then(response => {
 				this.setState({ isSubmitting: false }, () => onClose());
 			})
@@ -70,40 +79,55 @@ class CancelEventDialog extends React.Component {
 				this.setState({ isSubmitting: false });
 
 				notifications.showFromErrorResponse({
-					defaultMessage: "Cancelling event details failed.",
-					variant: "error"
+					defaultMessage: isDelete
+						? "Deleting event failed."
+						: "Cancelling event failed",
+					error
 				});
 			});
 	}
 
 	render() {
-		const { onClose, id } = this.props;
+		const { onClose, id, classes, isDelete } = this.props;
 		const { name, isSubmitting } = this.state;
 
 		return (
 			<Dialog
 				open={!!id}
 				onClose={onClose}
-				title={"Cancel event"}
+				title={isDelete ? "Delete Event" : "Cancel Event"}
 			>
 				<form noValidate autoComplete="off" onSubmit={this.onSubmit.bind(this)}>
 					<div>
 						<Typography>
-							Are you sure you want to cancel this event?
+							Are you sure you want to{" "}
+							{isDelete ? "permanently delete " : "cancel "} this event?
 						</Typography>
-						{name ? <Typography>{name}</Typography> : null}
+						{name ? (
+							<Typography className={classes.nameText}>{name}</Typography>
+						) : null}
 					</div>
-					<div>
-						<br/>
+					<div className={classes.btnContainer}>
 						<Button
-							style={{ marginRight: 10 }}
+							className={classes.btnStyle}
 							onClick={onClose}
 							color="primary"
 						>
 							Keep event
 						</Button>
-						<Button disabled={isSubmitting} type="submit" variant="warning">
-							{isSubmitting ? "Cancelling..." : "Cancel event"}
+						<Button
+							className={classes.btnStyle}
+							disabled={isSubmitting}
+							type="submit"
+							variant="warning"
+						>
+							{isSubmitting
+								? isDelete
+									? "Deleting..."
+									: "Cancelling..."
+								: isDelete
+									? "Delete event"
+									: "Cancel event"}
 						</Button>
 					</div>
 				</form>
@@ -112,9 +136,9 @@ class CancelEventDialog extends React.Component {
 	}
 }
 
-CancelEventDialog.propTypes = {
+DeleteCancelEventDialog.propTypes = {
 	id: PropTypes.string,
 	onClose: PropTypes.func.isRequired
 };
 
-export default withStyles(styles)(CancelEventDialog);
+export default withStyles(styles)(DeleteCancelEventDialog);
