@@ -165,8 +165,13 @@ class Tickets extends Component {
 				<div className={classes.root}>
 					{tickets.map((ticket, index) => {
 						const ticketType = "General access";
-						const qrText = "TODO";
-						const isRedeemable = ticket.status !== "Redeemed"; //TODO check other status when data comes in
+						const qrObj = {
+							type: 0,
+							data: { redeem_key: ticket.redeem_key, id: ticket.id, extra: "" }
+						};
+						const qrText = JSON.stringify(qrObj);
+						const isRedeemable =
+							ticket.redeem_key && ticket.status !== "Redeemed"; //TODO check other status when data comes in
 
 						return (
 							<div key={index} className={classes.ticketContainer}>
