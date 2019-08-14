@@ -164,7 +164,7 @@ class Tickets extends Component {
 			<TransferContainer>
 				<div className={classes.root}>
 					{tickets.map((ticket, index) => {
-						const ticketType = "General access";
+						const ticketType = ticket.ticket_type;
 						const qrObj = {
 							type: 0,
 							data: { redeem_key: ticket.redeem_key, id: ticket.id, extra: "" }
